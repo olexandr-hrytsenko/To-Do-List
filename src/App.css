@@ -1,0 +1,192 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+body {
+  background-color: #e1e388;
+}
+
+textarea {
+  resize: none;
+  font-size: 16px;
+  background-color: rgb(180, 200, 50);
+  border-radius: 5px;
+  padding: 5px 5px 5px 5px;
+  width: 100%;
+  height: 80px;
+}
+
+hr {
+  border: 1px solid #aaa719;
+  background-color: #d4d37f;
+  width: 100%;
+}
+
+label {
+  color: green;
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+table {
+  width: 80%;
+  text-align: center;
+}
+
+#col1 {
+  width: 20%;
+  text-align: left;
+  vertical-align: middle;
+}
+#col2 {
+  width: 80%;
+  text-align: inherit;
+  vertical-align: middle;
+}
+
+#pSearch {
+  width: 100%;
+}
+
+
+
+.tdate{
+  margin-bottom: 5px;
+  margin-top: 0px;
+  color: rgb(4, 66, 186);
+}
+
+.pstate_gr{
+  color: green;
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+.pstate_red{
+  color: red;
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+.field {
+  display: flex;
+  padding: 10px;
+  width: 50%;
+  margin-left: 25%;
+  color: #fff;
+  font-size: 1.3em;
+  flex-direction: column;
+  align-items: center;
+}
+
+.box {
+  border: 2px solid #aaa719;
+  background-color: #d4d37f;
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 80%;
+}
+
+.box:last-child {
+  margin-bottom: 0;
+}
+
+button.btn {
+  margin-right: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 0.65em;
+  color: #fff;
+  outline: none;
+}
+
+.btn.success {
+  background-color: #189333;
+  border: 2px solid #2a89a2;
+  margin-top: 5px;
+  margin-left: 32.5%;
+  width: 35%;
+}
+
+.btn.new {
+  background-color: #ec6a6a;
+  border: 2px solid #ff1212;
+  margin-bottom: 20px;
+}
+
+
+.btn.light {
+  background-color: #479fb6;
+  border: 2px solid #2a89a2;
+}
+
+.btn.red {
+  background-color: #dda66d;
+  border: 2px solid #b6821a;
+}
+
+.btn.light:hover {
+  background-color: #2a89a2;
+  border-color: #1d6f85;
+}
+
+.btn.red:hover {
+  background-color: #b6821a;
+  border-color: #946912;
+}
+
+.btn.new:hover {
+  background-color: #ec2b11;
+  border-color: #c30d0d;
+}
+
+
+/*Стиль для поля рейтинга*/
+
+*{
+  box-sizing: border-box;
+}
+.rating {
+  display: flex;
+  background-color: #d4d37f;
+}
+.rating-item {
+  width: 25px;
+  height: 25px;
+  background-color: green;
+  border: 2px solid #aaa719;
+  cursor: pointer;
+}
+
+.rating-item.active{
+  background-color: yellow;
+}
