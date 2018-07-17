@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 //import logo from './logo.svg';
 import './App.css';
 import localforage from 'localforage/dist/localforage';
+import Task from './Task.js';
+
 //import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 /*
 const SortableItem = SortableElement(({value}) =>
@@ -33,98 +35,12 @@ class SortableComponent extends Component {
 }
 */
 
-class Task extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      edit: false,
-      checked: this.props.arrDefaultChecked,
-      pclass: this.props.arrDefaultChecked ? 'pstate_gr' : 'pstate_red',
-      dateInput: this.props.arrDefaultDate
-    };
-  };
-  edit = () => {
-    this.setState({ edit: true });
-  };
-  remove = () => {
-    this.props.deleteBlock(this.props.index);
-  };
-  save = () => {
-    this.props.update(this.props.index, this.refs.newTxt.value);
-    this.setState({ edit: false })
-  };
-  checkState = () => { //установка статуса: Выполнено / Не выполнено
-    
-    this.setState({ checked: !this.state.checked }, () => {
-      if (this.state.checked) {
-        this.setState({ pclass: 'pstate_gr' });
-      } else {
-        this.setState({ pclass: 'pstate_red' });
-      }
-      this.props.updateCheck(this.props.index, this.state.checked);
-      //console.log (this.props.arrDefaultChecked);
-    });
-  };
-/*
-  compocomponentDidMount () {
-    this.setState({checked: this.props.arrDefaultChecked});
-    this.setState({pclass: this.props.arrDefaultChecked ? 'pstate_gr' : 'pstate_red'});
-    this.setState({dateInput: this.props.arrDefaultDate});
-  }
-*/
-  checkDate = (e) => {
-    const vDate = e.target.value;
-    this.setState({ dateInput: vDate }, () => this.props.updateDate(this.props.index, vDate));
-  };
-
-  rendNorm = () => {
-    var message;
-    if (this.state.checked) {
-      message = 'Выполнено';
-    } else {
-      message = 'Не выполнено';
-    };
-
-    return (
-      <div className="box">
-        <div className="text">{this.props.children}</div>
-        <hr />
-        <input ref="newCheck" type="checkbox" onChange={this.checkState} defaultChecked={this.state.checked} />
-        <p className={this.state.pclass}>Статус: {message}</p>
-        <label>Дата выполнения: </label>
-        <input ref="dateEnd" type="date" id="date_end" value={this.state.dateInput} onChange={this.checkDate} />
-        <hr />
-        <button onClick={this.edit} className="btn light">Редактировать</button>
-        <button onClick={this.remove} className="btn red">Удалить</button>
-        <hr />
-        <label># {this.props.index + 1}</label>
-      </div>
-    );
-  };
-  rendEdit = () => {
-    return (
-      <div className="box">
-        <textarea ref="newTxt" defaultValue={this.props.children}></textarea>
-        <button onClick={this.save} className="btn success">Сохранить</button>
-      </div>
-    );
-  };
-  render() {
-    if (this.state.edit) {
-      return this.rendEdit();
-    } else {
-      return this.rendNorm();
-    }
-  }
-}
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       tasks: [],
       date: new Date(),
-      nfilter: 1,
       filterSort: 'all',
       namefilter: 'date',
       filterOption: 'all',
@@ -135,7 +51,6 @@ class App extends Component {
   getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
   }
-
 
   componentDidMount() {/*
     this.timerId = setInterval(
@@ -227,7 +142,7 @@ class App extends Component {
     this.filterTask();
   };
 
-  // Сортировка по возростанию
+  // Сортировка по возрастанию
   sortDFunctionUP = (a, b) => {
     const name = this.state.namefilter;
     if (a[name] === b[name]) {
@@ -421,7 +336,7 @@ class App extends Component {
               <td id='col2'>
                 <select ref='pSort' id='pSort' value={this.state.filterSort} onChange={this.setFilterSort}>
                   <option value="all">---</option>
-                  <option value="dateUP">Дата (по возростанию)</option>
+                  <option value="dateUP">Дата (по возрастанию)</option>
                   <option value="dateDOWN">Дата (по убыванию)</option>
                   <option value="statusTrue">Статус: Выполнено</option>
                   <option value="statusFulse">Статус: Не выполнено</option>
