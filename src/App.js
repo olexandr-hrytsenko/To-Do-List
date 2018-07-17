@@ -1,39 +1,9 @@
 import React, { Component } from 'react';
-//import logo from './logo.svg';
 import './App.css';
 import localforage from 'localforage/dist/localforage';
 import Task from './Task.js';
+import Boxs from './Boxs.js';
 
-//import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
-/*
-const SortableItem = SortableElement(({value}) =>
-  <li>{value}</li>
-);
-
-const SortableList = SortableContainer(({items}) => {
-  return (
-    <ul>
-      {items.map((value, index) => (
-        <SortableItem key={`item-${index}`} index={index} value={value} />
-      ))}
-    </ul>
-  );
-});
-
-class SortableComponent extends Component {
-  state = {
-    items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'],
-  };
-  onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState({
-      items: arrayMove(this.state.items, oldIndex, newIndex),
-    });
-  };
-  render() {
-    return <SortableList items={this.state.items} onSortEnd={this.onSortEnd} />;
-  }
-}
-*/
 
 class App extends Component {
   constructor(props) {
@@ -44,7 +14,8 @@ class App extends Component {
       filterSort: 'all',
       namefilter: 'date',
       filterOption: 'all',
-      idTask: 0
+      idTask: 0,
+      setPriority: false
     };
   };
 
@@ -59,12 +30,11 @@ class App extends Component {
     );*/
     const self = this;
     localforage.setDriver(localforage.LOCALSTORAGE).then(function () {
-      localforage.getItem('arr_save', function (err, readValue) {
-        if (readValue == null) {
-          readValue = [];
+      localforage.getItem('arr_save', function (err, farr) {
+        if (farr == null) {
+          farr = [];
         }
-        self.setState({ tasks: readValue });
-        //console.log("localforage.setDriver");
+        self.setState({ tasks: farr });
       });
     });
   }
@@ -202,15 +172,14 @@ class App extends Component {
 
   // Поиск по заданиям
   searchText = (e) => {
-    
     const ptext = e.target.value.toLowerCase().trim();
     const self = this;
     if (ptext.length > 0) {
-        localforage.getItem('arr_save', function (err, readValue) {
-          if (readValue == null) {
-            readValue = [];
+      localforage.getItem('arr_save', function (err, farr) {
+          if (farr == null) {
+            farr = [];
           }
-          const farr = readValue.filter(function (item, i) {
+          farr = farr.filter(function (item, i) {
             if (item['text'].toLowerCase().search(ptext) !== -1) {
               return true;
             } else {
@@ -219,14 +188,13 @@ class App extends Component {
           }
           );
           self.setState({ tasks: farr });
-          //console.log( farr );
         });
     } else {
-        localforage.getItem('arr_save', function (err, readValue) {
-          if (readValue == null) {
-            readValue = [];
+        localforage.getItem('arr_save', function (err, farr) {
+          if (farr == null) {
+            farr = [];
           }
-          self.setState({ tasks: readValue });
+          self.setState({ tasks: farr }, () => self.filterTask());
         });
     }
   };
@@ -290,18 +258,32 @@ class App extends Component {
         break;
     }
   };
+/*
+arrMove = (oldIndex, newIndex) =>{
+  if (oldIndex !== newIndex) {
+    console.log(oldIndex, newIndex);
+    //var arr = this.state.tasks;
 
-  // Перебор задий
-  eachTask = (item, i) => {
-    return (
-      <Task key={ i.toString() + this.getRandomInt(1000).toString() } index={i} update={this.updateText} deleteBlock={this.deleteBlock} updateCheck={this.updateCheck} updateDate={this.updateDate} arrDefaultChecked={item.status} arrDefaultDate={item.date}>
-        {item.text}
-      </Task>
-    );
+
+    var array = this.state.tasks.slice(0);
+    if (newIndex >= array.length) {
+      var k = newIndex - array.length;
+      while (k-- + 1) {
+        array.push(undefined);
+      }
+    }
+    array.splice(newIndex, 0, array.splice(newIndex, 1)[0]);
+    console.log(array);
+    this.setState({tasks: array});
+  }
+
+}
+*/
+  checkPriority = () => {
+    this.setState({setPriority: !this.state.setPriority});
   };
 
-  render() {
-//         <p className="tdate">Текущее время: {this.state.date.toLocaleTimeString()}</p>
+  rendNorm = () => {
     return (
       <div className="field">
         <p className="tdate">Сегодня: {this.state.date.toLocaleDateString()}</p>
@@ -343,6 +325,14 @@ class App extends Component {
                 </select>
               </td>
             </tr>
+            <tr>
+              <td id='col1'>
+                <label>Изменить приоритет: </label>
+              </td>
+              <td id='col2'>
+                <input className="l" ref='all' type="checkbox" onChange={this.checkPriority} defaultChecked={this.state.setPriority} />
+              </td>
+            </tr>
           </tbody>
         </table>
         <br />
@@ -350,6 +340,82 @@ class App extends Component {
         {this.state.tasks.map(this.eachTask)}
       </div>
     );
+  };
+
+  rendSetPriority = () => {
+    return (
+      <div className="field">
+        <p className="tdate">Сегодня: {this.state.date.toLocaleDateString()}</p>
+
+        <table>
+          <tbody>
+            <tr>
+              <td id='col1'>
+                <label>Поиск: </label>
+              </td>
+              <td id='col2'>
+                <input type="search" ref="pSearch" id="pSearch" onChange={this.searchText} />
+              </td>
+            </tr>
+            <tr>
+              <td id='col1'>
+                <label>Фильтр: </label>
+              </td>
+              <td id='col2'>
+                <input ref='all' type="radio" name="filterOption" value='all' onChange={this.setFilterOption} defaultChecked={true} />
+                <label>Все </label>
+                <input ref='vip' type="radio" name="filterOption" value='vip' onChange={this.setFilterOption} />
+                <label>Выполнено </label>
+                <input ref='novip' type="radio" name="filterOption" value='novip' onChange={this.setFilterOption} />
+                <label>Не выполнено </label>
+              </td>
+            </tr>
+            <tr>
+              <td id='col1'>
+                <label>Сортировка: </label>
+              </td>
+              <td id='col2'>
+                <select ref='pSort' id='pSort' value={this.state.filterSort} onChange={this.setFilterSort}>
+                  <option value="all">---</option>
+                  <option value="dateUP">Дата (по возрастанию)</option>
+                  <option value="dateDOWN">Дата (по убыванию)</option>
+                  <option value="statusTrue">Статус: Выполнено</option>
+                  <option value="statusFulse">Статус: Не выполнено</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td id='col1'>
+                <label>Изменить приоритет: </label>
+              </td>
+              <td id='col2'>
+                <input className="l" ref='all' type="checkbox" onChange={this.checkPriority} defaultChecked={this.state.setPriority} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+        <button onClick={this.add.bind(null, 'Новое задание')} className="btn new">Добавить задание</button>
+        <Boxs />
+      </div>
+    );
+  };
+
+  // Перебор задий
+  eachTask = (item, i) => {
+    return (
+      <Task key={ i.toString() + this.getRandomInt(1000).toString() } index={i} update={this.updateText} deleteBlock={this.deleteBlock} updateCheck={this.updateCheck} updateDate={this.updateDate} arrDefaultChecked={item.status} arrDefaultDate={item.date}>
+        {item.text}
+      </Task>
+    );
+  };
+
+  render() {
+    if (this.state.setPriority) {
+      return this.rendSetPriority();
+    } else {
+      return this.rendNorm();
+    }
   }
 }
 export default App;
