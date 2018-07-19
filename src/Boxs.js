@@ -5,17 +5,17 @@ import {SortableContainer, SortableElement, SortableHandle, arrayMove} from 'rea
 const DragHandle = SortableHandle(() => {
   return(
     <span>
-      <img src="drag-reorder.png" />
+      <img src="drag-reorder.png" alt='Drag-list' />
     </span>
   )});
 
-const SortableItem = SortableElement(({value, date, status}) => (
+const SortableItem = SortableElement(({value, status, date}) => (
     <div className="box">{value}
         <hr />
-        <label>Статус:</label>
-        <br />
+        <input type="checkbox" defaultChecked={status} />
+        <p className={status ? 'pstate_gr' : 'pstate_red'}>Статус: {status ? 'Выполнено' : 'Не выполнено'}</p>
         <label>Дата выполнения: </label>
-        <input type='date' defaultValue={date} />
+        <input type='date' defaultValue={date} readonly="readonly" />
         <hr />< DragHandle/>
     </div>
     )
@@ -37,7 +37,7 @@ class Boxs extends React.Component {
 	constructor(props) {
     super(props);
     this.state = {
-        list: []
+        list: [],
     }
   }
   
@@ -72,7 +72,7 @@ class Boxs extends React.Component {
    // onSortEnd={({oldIndex, newIndex, collection}, e) => (self.props.arrMove(oldIndex, newIndex))}
     return (
       <div>
-        <SortableList items={this.state.list} onSortEnd={this.onSortEnd.bind(this)} axis='xy'  />
+        <SortableList items={this.state.list} onSortEnd={this.onSortEnd.bind(this)} axis='xy' useDragHandle = {true} />
       </div>
     );
   }

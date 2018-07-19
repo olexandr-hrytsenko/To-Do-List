@@ -19,10 +19,6 @@ class App extends Component {
     };
   };
 
-  getRandomInt = (max) => {
-    return Math.floor(Math.random() * Math.floor(max));
-  }
-
   componentDidMount() {/*
     this.timerId = setInterval(
       () => this.tick(),
@@ -47,6 +43,10 @@ class App extends Component {
     this.setState({
       date: new Date()
     });
+  }
+
+  getRandomInt = (max) => {
+    return Math.floor(Math.random() * Math.floor(max));
   }
 
   setTask = (arr) => {
@@ -85,7 +85,7 @@ class App extends Component {
   updateCheck = (i, checked) => {
     var arr = this.state.tasks;
     arr[i].status = checked;
-      localForage.setItem('arr_save', arr);
+    localForage.setItem('arr_save', arr);
     this.setState({ tasks: arr });
     this.filterTask();
 
@@ -239,27 +239,7 @@ class App extends Component {
         break;
     }
   };
-/*
-arrMove = (oldIndex, newIndex) =>{
-  if (oldIndex !== newIndex) {
-    console.log(oldIndex, newIndex);
-    //var arr = this.state.tasks;
 
-
-    var array = this.state.tasks.slice(0);
-    if (newIndex >= array.length) {
-      var k = newIndex - array.length;
-      while (k-- + 1) {
-        array.push(undefined);
-      }
-    }
-    array.splice(newIndex, 0, array.splice(newIndex, 1)[0]);
-    console.log(array);
-    this.setState({tasks: array});
-  }
-
-}
-*/
   checkPriority = () => {
     this.setState({setPriority: !this.state.setPriority});
   };
