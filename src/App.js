@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import localforage from 'localforage/dist/localforage';
+import localForage from 'localforage/dist/localforage';
 import Task from './Task.js';
 import Boxs from './Boxs.js';
 
@@ -19,7 +19,7 @@ class App extends Component {
     };
   };
 
-  getRandomInt(max) {
+  getRandomInt = (max) => {
     return Math.floor(Math.random() * Math.floor(max));
   }
 
@@ -29,8 +29,8 @@ class App extends Component {
       1000
     );*/
     const self = this;
-    localforage.setDriver(localforage.LOCALSTORAGE).then(function () {
-      localforage.getItem('arr_save', function (err, farr) {
+    localForage.setDriver(localForage.LOCALSTORAGE).then( () => {
+      localForage.getItem('arr_save').then( (farr) => {
         if (farr == null) {
           farr = [];
         }
@@ -69,8 +69,7 @@ class App extends Component {
     this.setState({idTask: this.state.tasks.length}, () =>{
       var arr = this.state.tasks;
       arr.push({text: text, status: false, date: this.setDate(), id: this.state.idTask});
-        localforage.setItem('arr_save', arr, function () {
-        });
+      localForage.setItem('arr_save', arr);
       this.setState({ tasks: arr });
       this.filterTask();
     });   
@@ -79,16 +78,14 @@ class App extends Component {
   deleteBlock = (i) => {
     var arr = this.state.tasks;
     arr.splice(i, 1);
-      localforage.setItem('arr_save', arr, function () {
-      });
+    localForage.setItem('arr_save', arr);
     this.setState({ tasks: arr });
   };
 
   updateCheck = (i, checked) => {
     var arr = this.state.tasks;
     arr[i].status = checked;
-      localforage.setItem('arr_save', arr, function () {
-      });
+      localForage.setItem('arr_save', arr);
     this.setState({ tasks: arr });
     this.filterTask();
 
@@ -97,8 +94,7 @@ class App extends Component {
   updateDate = (i, d) => {
     var arr = this.state.tasks;
     arr[i].date = d;
-      localforage.setItem('arr_save', arr, function () {
-      });
+    localForage.setItem('arr_save', arr);
     this.setState({ tasks: arr });
     this.filterTask();
   };
@@ -106,8 +102,7 @@ class App extends Component {
   updateText = (i, text) => {
     var arr = this.state.tasks;
     arr[i].text = text;
-      localforage.setItem('arr_save', arr, function () {
-      });
+    localForage.setItem('arr_save', arr);
     this.setState({ tasks: arr });
     this.filterTask();
   };
@@ -175,27 +170,22 @@ class App extends Component {
     const ptext = e.target.value.toLowerCase().trim();
     const self = this;
     if (ptext.length > 0) {
-      localforage.getItem('arr_save', function (err, farr) {
-          if (farr == null) {
-            farr = [];
+      localForage.getItem('arr_save').then( (farr) => {
+        farr = farr.filter(function (item, i) {
+          if (item['text'].toLowerCase().search(ptext) !== -1) {
+            return true;
+          } else {
+            return false;
           }
-          farr = farr.filter(function (item, i) {
-            if (item['text'].toLowerCase().search(ptext) !== -1) {
-              return true;
-            } else {
-              return false;
-            }
-          }
-          );
-          self.setState({ tasks: farr });
-        });
+        }
+        );
+        self.setState({ tasks: farr });
+      });
+      
     } else {
-        localforage.getItem('arr_save', function (err, farr) {
-          if (farr == null) {
-            farr = [];
-          }
-          self.setState({ tasks: farr }, () => self.filterTask());
-        });
+      localForage.getItem('arr_save').then( (farr) => {
+        self.setState({ tasks: farr }, () => self.filterTask());
+      });
     }
   };
 
@@ -212,10 +202,7 @@ class App extends Component {
     const self = this;
     switch (this.state.filterOption) {
       case 'vip': {
-        localforage.getItem('arr_save', function (err, farr) {
-          if (farr == null) {
-            farr = [];
-          }
+        localForage.getItem('arr_save').then( (farr) => {
           farr = farr.filter(function (item, i) {
             if (item['status']) {
               return true;
@@ -229,10 +216,7 @@ class App extends Component {
         break;
        }
       case 'novip': {
-        localforage.getItem('arr_save', function (err, farr) {
-          if (farr == null) {
-            farr = [];
-          }
+        localForage.getItem('arr_save').then( (farr) => {
           farr = farr.filter(function (item, i) {
             if (item['status'] === false) {
               return true;
@@ -246,10 +230,7 @@ class App extends Component {
         break;
       }
       case 'all': {
-        localforage.getItem('arr_save', function (err, farr) {
-          if (farr == null) {
-            farr = [];
-          }
+        localForage.getItem('arr_save').then( (farr) => {
           self.setState({ tasks: farr }, () => self.sortTask());
         });
         break;

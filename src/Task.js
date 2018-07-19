@@ -6,7 +6,6 @@ class Task extends React.Component {
     this.state = {
       edit: false,
       checked: this.props.arrDefaultChecked,
-      pclass: this.props.arrDefaultChecked ? 'pstate_gr' : 'pstate_red',
       dateInput: this.props.arrDefaultDate
     };
   };
@@ -30,11 +29,6 @@ class Task extends React.Component {
   // изменение статуса: Выполнено / Не выполнено (checkbox)
   checkState = () => { 
     this.setState({ checked: !this.state.checked }, () => {
-      if (this.state.checked) {
-        this.setState({ pclass: 'pstate_gr' });
-      } else {
-        this.setState({ pclass: 'pstate_red' });
-      }
       this.props.updateCheck(this.props.index, this.state.checked);
     });
   };
@@ -59,7 +53,7 @@ class Task extends React.Component {
         <div className="text">{this.props.children}</div>
         <hr />
         <input ref="newCheck" type="checkbox" onChange={this.checkState} defaultChecked={this.state.checked} />
-        <p className={this.state.pclass}>Статус: {message}</p>
+        <p className={this.props.arrDefaultChecked ? 'pstate_gr' : 'pstate_red'}>Статус: {message}</p>
         <label>Дата выполнения: </label>
         <input ref="dateEnd" type="date" id="date_end" value={this.state.dateInput} onChange={this.checkDate} />
         <hr />
