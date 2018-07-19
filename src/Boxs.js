@@ -1,5 +1,5 @@
 import React from 'react';
-import localforage from 'localforage/dist/localforage';
+//import localForage from 'localforage/dist/localforage';
 import {SortableContainer, SortableElement, SortableHandle, arrayMove} from 'react-sortable-hoc';
 
 const DragHandle = SortableHandle(() => {
@@ -37,13 +37,15 @@ class Boxs extends React.Component {
 	constructor(props) {
     super(props);
     this.state = {
-        list: [],
+        list: []
     }
   }
   
   componentDidMount() {
+    var arr = this.props.tList;
+    this.setState({ list: arr });
+    /*
     const self = this;
-
     localforage.getItem('arr_save', function (err, farr) {
       if (farr == null) {
         farr = [];
@@ -53,18 +55,20 @@ class Boxs extends React.Component {
       //});
       self.setState({ list: farr });
     });
-
+    */
   }
+  SavePriority = () => {
+    this.props.SetTaskPriority(this.state.list);
+  };
+
 
   onSortEnd({oldIndex, newIndex}) {
     this.setState({
       list: arrayMove(this.state.list, oldIndex, newIndex)
     });
-    //alert(Math.floor((Math.random()*1000)).toString());
-    var arr = this.state.list;
-    localforage.setItem('arr_save', arr);
-    //this.props.arrMove(oldIndex, newIndex);
-    //console.log(oldIndex, newIndex)
+    this.SavePriority();
+   // var arr = this.state.list;
+   // localforage.setItem('arr_save', arr);
   }
   // useDragHandle = {true}
   render() {

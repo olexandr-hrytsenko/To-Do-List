@@ -244,6 +244,10 @@ class App extends Component {
     this.setState({setPriority: !this.state.setPriority});
   };
 
+  SetTaskPriority = (arr) => {
+    this.setState({tasks: arr});
+  }
+
   rendNorm = () => {
     return (
       <div className="field">
@@ -357,7 +361,7 @@ class App extends Component {
         </table>
         <br />
         <button onClick={this.add.bind(null, 'Новое задание')} className="btn new">Добавить задание</button>
-        <Boxs />
+        <Boxs tList={this.state.tasks} SetTaskPriority={this.SetTaskPriority} />
       </div>
     );
   };
