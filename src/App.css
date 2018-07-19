@@ -199,13 +199,6 @@ button.btn {
 
 /*Стиль для переключателя chekbox (Измениить приоритет)*/
 
-.center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 input[type="checkbox"] {
   width: 40px;
   height: 20px;

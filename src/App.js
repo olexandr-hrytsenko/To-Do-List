@@ -171,7 +171,7 @@ class App extends Component {
     const self = this;
     if (ptext.length > 0) {
       localForage.getItem('arr_save').then( (farr) => {
-        farr = farr.filter(function (item, i) {
+        farr = farr.filter( (item, i) => {
           if (item['text'].toLowerCase().search(ptext) !== -1) {
             return true;
           } else {
@@ -180,8 +180,7 @@ class App extends Component {
         }
         );
         self.setState({ tasks: farr });
-      });
-      
+      });      
     } else {
       localForage.getItem('arr_save').then( (farr) => {
         self.setState({ tasks: farr }, () => self.filterTask());
@@ -203,7 +202,7 @@ class App extends Component {
     switch (this.state.filterOption) {
       case 'vip': {
         localForage.getItem('arr_save').then( (farr) => {
-          farr = farr.filter(function (item, i) {
+          farr = farr.filter( (item, i) => {
             if (item['status']) {
               return true;
             } else {
@@ -217,7 +216,7 @@ class App extends Component {
        }
       case 'novip': {
         localForage.getItem('arr_save').then( (farr) => {
-          farr = farr.filter(function (item, i) {
+          farr = farr.filter( (item, i) => {
             if (item['status'] === false) {
               return true;
             } else {
@@ -245,7 +244,11 @@ class App extends Component {
   };
 
   SetTaskPriority = (arr) => {
+    arr.forEach( (item, i) => {
+      item.id = i;
+    });
     this.setState({tasks: arr});
+    //localForage.setItem('arr_save', arr);
   }
 
   rendNorm = () => {

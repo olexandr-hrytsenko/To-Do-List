@@ -15,8 +15,9 @@ const SortableItem = SortableElement(({value, status, date}) => (
         <input type="checkbox" defaultChecked={status} />
         <p className={status ? 'pstate_gr' : 'pstate_red'}>Статус: {status ? 'Выполнено' : 'Не выполнено'}</p>
         <label>Дата выполнения: </label>
-        <input type='date' defaultValue={date} readonly="readonly" />
-        <hr />< DragHandle/>
+        <input type='date' defaultValue={date} readOnly={true} />
+        <hr />
+        < DragHandle/>
     </div>
     )
 );
