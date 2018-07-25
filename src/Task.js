@@ -10,9 +10,14 @@ class Task extends React.Component {
     };
   };
 
+
+
+
+
   // режим редактирования (кнопка: Редактировать)
   edit = () => {
     this.setState({ edit: true });
+    //this.props.handleNotDrag(true);
   };
 
   // удаление блока (кнопка: Удалить)
@@ -23,7 +28,8 @@ class Task extends React.Component {
   // сохранение (кнопка: Сохранить)
   save = () => {
     this.props.update(this.props.index, this.refs.newTxt.value);
-    this.setState({ edit: false })
+    this.setState({ edit: false });
+    //this.props.handleNotDrag(false);
   };
 
   // изменение статуса: Выполнено / Не выполнено (checkbox)
@@ -57,7 +63,7 @@ class Task extends React.Component {
         <label>Дата выполнения: </label>
         <input ref="dateEnd" type="date" id="date_end" value={this.state.dateInput} onChange={this.checkDate} />
         <hr />
-        <button onClick={this.edit} className="btn light">Редактировать</button>
+        <button  onClick={this.edit} className="btn light" >Редактировать</button>
         <button onClick={this.remove} className="btn red">Удалить</button>
         <hr />
         <label># {this.props.index + 1}</label>

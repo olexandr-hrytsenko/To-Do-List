@@ -2,6 +2,10 @@ import React from 'react';
 import {SortableContainer, SortableElement, SortableHandle, arrayMove} from 'react-sortable-hoc';
 import Task from './Task.js';
 import localForage from 'localforage/dist/localforage';
+//import styled from 'styled-components';
+
+
+var randtoken = require('rand-token');
 
 const DragHandle = SortableHandle(() => {
   return(
@@ -10,21 +14,21 @@ const DragHandle = SortableHandle(() => {
     </span>
   )});
 
-const SortableItem = SortableElement(({value, status, date, i, updateText, deleteBlock, updateCheck, updateDate}) => (
+const SortableItem = SortableElement(({value, status, date, i, updateText, deleteBlock, updateCheck, updateDate, handleNotDrag}) => (
     <div className="box">
         < DragHandle/>
-        <Task key={ i.toString() + Math.floor((Math.random()*1000)).toString() } index={i} update={updateText} deleteBlock={deleteBlock} updateCheck={updateCheck} updateDate={updateDate} arrDefaultChecked={status} arrDefaultDate={date} >
+        <Task key={ randtoken.generate(16) } index={i} update={updateText} deleteBlock={deleteBlock} updateCheck={updateCheck} updateDate={updateDate} arrDefaultChecked={status} arrDefaultDate={date} handleNotDrag={handleNotDrag} >
           {value}
         </Task>
     </div>
     )
 );
                                      
-const SortableList = SortableContainer(({items, updateText, deleteBlock, updateCheck, updateDate}) => {
+const SortableList = SortableContainer(({items, updateText, deleteBlock, updateCheck, updateDate, handleNotDrag}) => {
     return (
       <div className="container">
         {items.map((item, index) => {
-          return <SortableItem key={`item-${index}`+Math.floor((Math.random()*1000)).toString()} index={index} value={item.text} date={item.date} status={item.status} i={index} updateText={updateText} deleteBlock={deleteBlock} updateCheck={updateCheck} updateDate={updateDate} />;
+          return <SortableItem key={`item-${index}-` + randtoken.generate(16)} index={index} value={item.text} date={item.date} status={item.status} i={index} updateText={updateText} deleteBlock={deleteBlock} updateCheck={updateCheck} updateDate={updateDate} handleNotDrag={handleNotDrag} />;
         })}
       </div>
     );
@@ -34,12 +38,12 @@ class Boxs extends React.Component {
 	constructor(props) {
     super(props);
     this.state = {
-        list: this.props.tList,
         tasks: [],
         filterSort: 'all',
         namefilter: 'id',
         filterOption: 'all',
         idTask: 0,
+        notDrag: false
     }
   }
 
@@ -68,6 +72,10 @@ class Boxs extends React.Component {
     return (tdate);
   };
 
+  save = () => {
+    var arr = this.state.tasks;
+    localForage.setItem('arr_save', arr);
+  }
 
 // Add task
   add = (text) => {
@@ -94,8 +102,8 @@ updateCheck = (i, checked) => {
   var arr = this.state.tasks;
   arr[i].status = checked;
   localForage.setItem('arr_save', arr);
-  this.setState({ tasks: arr });
-  this.filterTask();
+  this.setState({ tasks: arr }, () => this.filterTask());
+  //this.filterTask();
 
 };
 
@@ -104,8 +112,8 @@ updateDate = (i, d) => {
   var arr = this.state.tasks;
   arr[i].date = d;
   localForage.setItem('arr_save', arr);
-  this.setState({ tasks: arr });
-  this.filterTask();
+  this.setState({ tasks: arr }, () => this.filterTask());
+  //this.filterTask();
 };
 
 // Update text of task
@@ -113,8 +121,8 @@ updateText = (i, text) => {
   var arr = this.state.tasks;
   arr[i].text = text;
   localForage.setItem('arr_save', arr);
-  this.setState({ tasks: arr });
-  this.filterTask();
+  this.setState({ tasks: arr }, () => this.filterTask());
+  //this.filterTask();
 };
 
 // Sort ascending
@@ -191,11 +199,13 @@ searchText = (e) => {
       }
       );
       self.setState({ tasks: farr });
-    });      
+    });
+    this.setState({notDrag: true});      
   } else {
     localForage.getItem('arr_save').then( (farr) => {
       self.setState({ tasks: farr }, () => self.filterTask());
     });
+    this.setState({notDrag: false});
   }
 };
 
@@ -223,6 +233,7 @@ filterTask = () => {
         );
         self.setState({ tasks: farr }, () => self.sortTask());
       });
+      this.setState({notDrag: true});
       break;
      }
     case 'novip': {
@@ -237,20 +248,20 @@ filterTask = () => {
         );
         self.setState({ tasks: farr }, () => self.sortTask());
       });
+      this.setState({notDrag: true});
       break;
     }
     case 'all': {
       localForage.getItem('arr_save').then( (farr) => {
         self.setState({ tasks: farr }, () => self.sortTask());
       });
+      this.setState({notDrag: false});
       break;
     }
     default:
       break;
   }
 };
-
-
 
   updateId = () => {
     var arr = this.state.tasks;
@@ -261,7 +272,6 @@ filterTask = () => {
     localForage.setItem('arr_save', arr);
   };
 
-
   onSortEnd({oldIndex, newIndex}) {
     this.setState({
       tasks: arrayMove(this.state.tasks, oldIndex, newIndex)
@@ -269,9 +279,20 @@ filterTask = () => {
     this.updateId();
   }
 
+  isnotDrag = () => {
+    /*if (this.state.notDrag) {
+      alert('Перемещение не доступно!');
+    }*/
+    return this.state.notDrag;
+  }
+
+  handleNotDrag = (e) =>{
+    this.setState({notDrag: e});
+  }
+
   render() {
     return (
-      <div className='tt'>
+      <div>
         <table>
           <tbody>
             <tr>
@@ -279,7 +300,7 @@ filterTask = () => {
                 <label>Поиск: </label>
               </td>
               <td id='col2'>
-                <input type="search" ref="pSearch" id="pSearch" onChange={this.searchText} />
+                <input placeholder='Введите текст' type="search" ref="pSearch" id="pSearch" onChange={this.searchText} />
               </td>
             </tr>
             <tr>
@@ -313,7 +334,7 @@ filterTask = () => {
         </table>
         <br />
         <button onClick={this.add.bind(null, 'Новое задание')} className="btn new">Добавить задание</button>
-        <SortableList items={this.state.tasks} onSortEnd={this.onSortEnd.bind(this)} axis='xy' useDragHandle = {true} hideSortableGhost={true} updateText={this.updateText} deleteBlock={this.deleteBlock} updateCheck={this.updateCheck} updateDate={this.updateDate} />
+        <SortableList items={this.state.tasks} onSortEnd={this.onSortEnd.bind(this)} lockAxis='xy' useDragHandle = {true} hideSortableGhost={true} updateText={this.updateText} deleteBlock={this.deleteBlock} updateCheck={this.updateCheck} updateDate={this.updateDate} shouldCancelStart={this.isnotDrag} handleNotDrag={this.handleNotDrag} />
       </div>
     );
   }

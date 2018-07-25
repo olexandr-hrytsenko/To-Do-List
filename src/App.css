@@ -146,6 +146,8 @@ button.btn {
 .btn.save {
   background-color: #27b345;
   border: 2px solid #2a89a2;
+  margin-left: 30%;
+  width: 40%;
 }
 
 .btn.new {
