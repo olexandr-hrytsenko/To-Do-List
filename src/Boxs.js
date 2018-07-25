@@ -10,7 +10,6 @@ const DragHandle = SortableHandle(() => {
     </span>
   )});
 
-
 const SortableItem = SortableElement(({value, status, date, i, updateText, deleteBlock, updateCheck, updateDate}) => (
     <div className="box">
         < DragHandle/>
@@ -30,8 +29,6 @@ const SortableList = SortableContainer(({items, updateText, deleteBlock, updateC
       </div>
     );
 });
-
-
 
 class Boxs extends React.Component {
 	constructor(props) {
