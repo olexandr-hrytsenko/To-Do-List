@@ -9,9 +9,9 @@ var randtoken = require('rand-token');
 
 const DragHandle = SortableHandle(() => {
   return(
-    <span>
+ 
       <img src="drag-reorder.png" alt='Drag-list' />
-    </span>
+
   )});
 
 const SortableItem = SortableElement(({value, status, date, i, updateText, deleteBlock, updateCheck, updateDate, handleNotDrag}) => (
@@ -161,22 +161,27 @@ sortTask = () => {
   switch (this.state.filterSort) {
     case 'dateUP': {
       this.setState({ namefilter: 'date' }, () => this.setState({ tasks: arr.sort(this.sortDFunctionUP) }));
+      this.setState({notDrag: true});
       break;
      }
     case 'dateDOWN': {
       this.setState({ namefilter: 'date' }, () => this.setState({ tasks: arr.sort(this.sortDFunctionDOWN) }));
+      this.setState({notDrag: true});
       break;
     }
     case 'statusFulse': {
       this.setState({ namefilter: 'status' }, () => this.setState({ tasks: arr.sort(this.sortDFunctionUP) }));
+      this.setState({notDrag: true});
       break;
      }
     case 'statusTrue': {
       this.setState({ namefilter: 'status' }, () => this.setState({ tasks: arr.sort(this.sortDFunctionDOWN) }));     
+      this.setState({notDrag: true});
       break;
     }  
     case 'all': {
       this.setState({ namefilter: 'id' }, () => this.setState({ tasks: arr.sort(this.sortDFunctionDOWN) }));
+      this.setState({notDrag: false});
       break;
     } 
     default:

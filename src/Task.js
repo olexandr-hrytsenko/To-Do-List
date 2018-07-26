@@ -10,10 +10,6 @@ class Task extends React.Component {
     };
   };
 
-
-
-
-
   // режим редактирования (кнопка: Редактировать)
   edit = () => {
     this.setState({ edit: true });
