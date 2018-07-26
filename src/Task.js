@@ -1,4 +1,12 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const P = styled.p`
+  color: ${props => props.pColor ? 'green' : 'red'};
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+`;
 
 class Task extends React.Component {
   constructor(props) {
@@ -49,13 +57,13 @@ class Task extends React.Component {
     } else {
       message = 'Не выполнено';
     };
-
+    //<p className={this.props.arrDefaultChecked ? 'pstate_gr' : 'pstate_red'}>Статус: {message}</p>
     return (
       <div className="box">
         <div className="text">{this.props.children}</div>
         <hr />
         <input ref="newCheck" type="checkbox" onChange={this.checkState} defaultChecked={this.state.checked} />
-        <p className={this.props.arrDefaultChecked ? 'pstate_gr' : 'pstate_red'}>Статус: {message}</p>
+        <P pColor={this.props.arrDefaultChecked}>Статус: {message}</P>
         <label>Дата выполнения: </label>
         <input ref="dateEnd" type="date" id="date_end" value={this.state.dateInput} onChange={this.checkDate} />
         <hr />

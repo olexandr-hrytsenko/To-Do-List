@@ -2,7 +2,28 @@ import React from 'react';
 import {SortableContainer, SortableElement, SortableHandle, arrayMove} from 'react-sortable-hoc';
 import Task from './Task.js';
 import localForage from 'localforage/dist/localforage';
-//import styled from 'styled-components';
+import styled from 'styled-components';
+
+const Button = styled.button`
+  /* Adapt the colours based on primary prop */
+  padding: 10px;
+  cursor: pointer;
+  font-size: 0.7em;
+  color: #fff;
+  outline: none;
+  background-color: #ec6a6a;
+  border: 2px solid #ff1212;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 30%;
+  width: 40%;
+  &:hover  {
+    background-color: #ec2b11;
+    border-color: #c30d0d;
+  }
+`;
+
 
 
 var randtoken = require('rand-token');
@@ -338,7 +359,7 @@ filterTask = () => {
           </tbody>
         </table>
         <br />
-        <button onClick={this.add.bind(null, 'Новое задание')} className="btn new">Добавить задание</button>
+        <Button onClick={this.add.bind(null, 'Новое задание')} >Добавить задание</Button>
         <SortableList items={this.state.tasks} onSortEnd={this.onSortEnd.bind(this)} lockAxis='xy' useDragHandle = {true} hideSortableGhost={true} updateText={this.updateText} deleteBlock={this.deleteBlock} updateCheck={this.updateCheck} updateDate={this.updateDate} shouldCancelStart={this.isnotDrag} handleNotDrag={this.handleNotDrag} />
       </div>
     );
