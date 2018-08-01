@@ -4,7 +4,6 @@ import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import 'moment/locale/ru'
 import 'react-datepicker/dist/react-datepicker.css'
-import 'react-datepicker/dist/react-datepicker-cssmodules.css'
 
 const P = styled.p`
   color: ${props => (props.pColor ? 'green' : 'red')};
