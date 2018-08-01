@@ -8,7 +8,7 @@ import {
 import Task, { Label, DivBox } from './Task.js'
 import localForage from 'localforage/dist/localforage'
 import styled from 'styled-components'
-import moment from 'moment';
+import moment from 'moment'
 
 const Button = styled.button`
   padding: 10px;
@@ -34,9 +34,10 @@ const Table = styled.table`
 `
 const Td = styled.td`
   vertical-align: middle;
-  width: ${props => () =>{
-    return props.FirstCol ? '20%' : '80%'} };
-  text-align: ${props => props.FirstCol ? 'left' : 'inherit' };
+  width: ${props => () => {
+    return props.FirstCol ? '20%' : '80%'
+  }};
+  text-align: ${props => (props.FirstCol ? 'left' : 'inherit')};
 `
 const InputSearch = styled.input`
   width: 100%;
@@ -47,9 +48,8 @@ const DivContainer = styled.div`
   margin-right: 0%;
 `
 const Img = styled.img`
-  filter: ${props => props.imgDrag ? 'sepia(100%)' : 'sepia(0%)' };
+  filter: ${props => (props.imgDrag ? 'sepia(100%)' : 'sepia(0%)')};
 `
-
 var randtoken = require('rand-token')
 
 const DragHandle = SortableHandle(() => {
@@ -67,7 +67,7 @@ const SortableItem = SortableElement(
     deleteBlock,
     updateCheck,
     updateDate,
-    handleNotDrag
+    handleNotDrag,
   }) => (
     <DivBox>
       <DragHandle handleNotDrag={handleNotDrag} />
@@ -148,7 +148,7 @@ class Boxs extends React.Component {
       })
     })
   }
-/*
+  /*
   setDate = () => {
     var d = new Date()
     var dd = d.getDate().toString()
@@ -169,14 +169,16 @@ class Boxs extends React.Component {
   // Add task
   add = e => {
     this.setState({ idTask: this.state.tasks.length }, () => {
-      var arr = [{
-        text: 'Новое задание',
-        status: false,
-        date: moment(),
-        id: this.state.idTask ,
-        randkey: randtoken.generate(16)
-      },
-      ...this.state.tasks]
+      var arr = [
+        {
+          text: 'Новое задание',
+          status: false,
+          date: moment(),
+          id: this.state.idTask,
+          randkey: randtoken.generate(16),
+        },
+        ...this.state.tasks,
+      ]
       localForage.setItem('arr_save', arr)
       this.setState({ tasks: arr })
       this.filterTask()
@@ -372,7 +374,7 @@ class Boxs extends React.Component {
   updateId = () => {
     var arr = this.state.tasks
     arr.forEach((item, i) => {
-      item.id = i;
+      item.id = i
     })
     this.setState({ tasks: arr })
     localForage.setItem('arr_save', arr)

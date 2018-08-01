@@ -12,7 +12,6 @@ const P = styled.p`
   margin-top: 0px;
   margin-bottom: 5px;
 `
-
 const Input = styled.input`
   width: 40px;
   height: 20px;
@@ -21,30 +20,29 @@ const Input = styled.input`
   background: #5a5a5a;
   outline: none;
   border-radius: 10px;
-  box-shadow: inset 0 0 5px rgba(0,0,0, .2);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   transition: 0.5s;
   position: relative;
-  &:checked[type="checkbox"] {
-  background: #1f8301;
-}
-&[type="checkbox"]::before {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  top: 0;
-  left: 0;
-  background: #fff;
-  transform: scale(1.1);
-  box-shadow: 0 2px 5px rgba(0,0,0, .2);
-  transition: 0.5s;
-}
-&:checked[type="checkbox"]::before {
-  left: 20px;
-}
+  &:checked[type='checkbox'] {
+    background: #1f8301;
+  }
+  &[type='checkbox']::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: 0.5s;
+  }
+  &:checked[type='checkbox']::before {
+    left: 20px;
+  }
 `
-
 const Textarea = styled.textarea`
   resize: none;
   font-size: 16px;
@@ -54,13 +52,11 @@ const Textarea = styled.textarea`
   width: 100%;
   height: 80px;
 `
-
 const Hr = styled.hr`
   border: 1px solid #aaa719;
   background-color: #d4d37f;
   width: 100%;
 `
-
 const Label = styled.label`
   color: green;
   font-size: 14px;
@@ -77,7 +73,57 @@ const DivBox = styled.div`
     margin-bottom: 0;
   }
 `
+const BtnSave = styled.button`
+  margin-right: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 0.65em;
+  color: #fff;
+  outline: none;
 
+  background-color: #27b345;
+  border: 2px solid #477d53;
+  margin-top: 5px;
+  margin-left: 30%;
+  width: 40%;
+  &:hover {
+    background-color: #00cf2d;
+    border: 2px solid #189834;
+  }
+`
+const BtnEdit = styled.button`
+  margin-right: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 0.65em;
+  color: #fff;
+  outline: none;
+
+  background-color: #479fb6;
+  border: 2px solid #2a89a2;
+  &:hover {
+    background-color: #2a89a2;
+    border-color: #1d6f85;
+  }
+`
+const BtnDel = styled.button`
+  margin-right: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 0.65em;
+  color: #fff;
+  outline: none;
+
+  background-color: #dda66d;
+  border: 2px solid #b6821a;
+  &:hover {
+    background-color: #b6821a;
+    border-color: #946912;
+  }
+`
 
 class Task extends React.Component {
   constructor(props) {
@@ -86,7 +132,7 @@ class Task extends React.Component {
       edit: false,
       checked: this.props.arrDefaultChecked,
       startDate: moment(this.props.arrDefaultDate),
-      textareaValue: this.props.children
+      textareaValue: this.props.children,
     }
   }
 
@@ -124,7 +170,7 @@ class Task extends React.Component {
   }
 
   handleTextarea = e => {
-    this.setState({textareaValue: e.target.value})
+    this.setState({ textareaValue: e.target.value })
   }
 
   rendNorm = () => {
@@ -154,12 +200,8 @@ class Task extends React.Component {
           todayButton="Сегодня"
         />
         <Hr />
-        <button onClick={this.edit} className="btn light">
-          Редактировать
-        </button>
-        <button onClick={this.remove} className="btn red">
-          Удалить
-        </button>
+        <BtnEdit onClick={this.edit}>Редактировать</BtnEdit>
+        <BtnDel onClick={this.remove}>Удалить</BtnDel>
         <Hr />
         <Label># {this.props.index + 1}</Label>
       </DivBox>
@@ -170,10 +212,12 @@ class Task extends React.Component {
   rendEdit = () => {
     return (
       <DivBox>
-        <Textarea ref="newTxt" onChange={this.handleTextarea} defaultValue={this.state.textareaValue} />
-        <button onClick={this.save} className="btn success">
-          Сохранить
-        </button>
+        <Textarea
+          ref="newTxt"
+          onChange={this.handleTextarea}
+          defaultValue={this.state.textareaValue}
+        />
+        <BtnSave onClick={this.save}>Сохранить</BtnSave>
       </DivBox>
     )
   }
@@ -187,5 +231,5 @@ class Task extends React.Component {
   }
 }
 
-export {Label, DivBox}
+export { Label, DivBox }
 export default Task
