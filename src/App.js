@@ -1,14 +1,33 @@
-import React, { Component } from 'react';
-import './App.css';
-import Boxs from './Boxs.js';
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import './App.css'
+import Boxs from './Boxs.js'
+
+
+const DivField = styled.div`
+  display: flex;
+  padding: 10px;
+  width: 50%;
+  margin-left: 25%;
+  color: #fff;
+  font-size: 1.3em;
+  flex-direction: column;
+  align-items: center;
+`
+
+const Pdate = styled.p`
+  margin-bottom: 5px;
+  margin-top: 0px;
+  color: rgb(4, 66, 186);
+`
 
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       date: new Date(),
-    };
-  };
+    }
+  }
 
   componentDidMount() {
     /*this.timerId = setInterval(
@@ -24,17 +43,17 @@ class App extends Component {
 
   tick() {
     this.setState({
-      date: new Date()
-    });
+      date: new Date(),
+    })
   }
 
   render() {
     return (
-      <div className="field">
-        <p className="tdate">Сегодня: {this.state.date.toLocaleDateString()}</p>
+      <DivField>
+        <Pdate>Сегодня: {this.state.date.toLocaleDateString()}</Pdate>
         <Boxs />
-      </div>
-    );
+      </DivField>
+    )
   }
 }
-export default App;
+export default App
