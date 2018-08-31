@@ -49,6 +49,14 @@ const Pdate = styled.p`
   color: rgb(4, 66, 186);
 `
 
+const Label = styled.label`
+  color: green;
+  font-size: 14px;
+  margin-top: 20px;
+  margin-bottom: 5px;
+  display:"block";
+`
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -56,8 +64,11 @@ class App extends Component {
       date: new Date(),
       loading: true,
       loggedIn:false,
-      repos: null
+      repos: null,
+      username: '',
+      password: ''
     }
+    this.handleChange = this.handleChange.bind(this);
   }
 
 
@@ -80,6 +91,10 @@ class App extends Component {
     })
   }
 
+  handleChange(e) {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+}
 
   loginHandle = () => {
     this.setState(prevState => ({
@@ -100,7 +115,7 @@ class App extends Component {
   }
 
   render() {
-    const { loading } = this.state;
+    const { loading, loggedIn, username, password } = this.state;
 
     if(loading) {
       return (
@@ -117,30 +132,47 @@ class App extends Component {
         </DivLoad> 
       )
     } else {
-      return (
-        <DivField>
-          <Pdate>Сегодня: {this.state.date.toLocaleDateString()}</Pdate>
-          <BrowserRouter>
-            <div>
-              <Navigation />
-              <input style={{ margin:"20px auto", display:"block" }} type="button" value={this.state.loggedIn ? 'Выход': 'Вход'} onClick={this.loginHandle}/>
-              <UserForm getUser={this.getUser} />
-              { this.state.repos ? <p>Number of repos: { this.state.repos }</p> : <p>Please enter a username.</p> }
-              
-              <Switch>
-                <Route path="/" exact strict component={Home} exact />
-                <Route path="/about" exact strict render={({match})=>(
-                this.state.loggedIn ? ( <About />) : (<Redirect to='/' />)
-                )} />
-                <Route path="/program" exact strict render={({match})=>(
-                this.state.loggedIn ? ( <Program />) : (<Redirect to='/' />)
-                )} />
-                <Route component={Error} />
-              </Switch>
-            </div>
-          </BrowserRouter>
-        </DivField>
-      )
+      if (!loggedIn) {
+        return (
+          <DivField>
+            <Label>Логин: </Label>
+            <input style={{ display:"block" }} type="text" name="username" value={username} onChange={this.handleChange} />
+            <Label>Пароль: </Label>
+            <input style={{ display:"block" }} type="password" name="password" value={password} onChange={this.handleChange} />
+            <input style={{ margin:"20px auto", display:"block" }} type="button" value={this.state.loggedIn ? 'Выход': 'Вход'} onClick={this.loginHandle}/>
+            
+          </DivField>
+        )
+        
+      } else {
+        return (
+          <DivField>
+            <input style={{ margin:"20px auto", display:"block" }} type="button" value={this.state.loggedIn ? 'Выход': 'Вход'} onClick={this.loginHandle}/>
+            <Pdate>Сегодня: {this.state.date.toLocaleDateString()}</Pdate>
+            <BrowserRouter>
+              <div>
+                <Navigation />
+                
+                <UserForm getUser={this.getUser} />
+                { this.state.repos ? <p>Number of repos: { this.state.repos }</p> : <p>Введите имя пользователя..</p> }
+                
+                <Switch>
+                  <Route path="/" exact strict component={Home} exact />
+                  <Route path="/about" exact strict render={({match})=>(
+                  this.state.loggedIn ? ( <About />) : (<Redirect to='/' />)
+                  )} />
+                  <Route path="/program" exact strict render={({match})=>(
+                  this.state.loggedIn ? ( <Program />) : (<Redirect to='/' />)
+                  )} />
+                  <Route component={Error} />
+                </Switch>
+              </div>
+            </BrowserRouter>
+          </DivField>
+        )
+
+      }
+      
     }
    
   }
