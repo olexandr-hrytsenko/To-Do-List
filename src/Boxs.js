@@ -181,7 +181,7 @@ class Boxs extends React.Component {
       ]
       localForage.setItem('arr_save', arr)
       this.setState({ tasks: arr })
-      this.filterTask()
+      //  this.filterTask()
     })
   }
 
