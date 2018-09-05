@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components'
+//import styled from 'styled-components'
 import Boxs from '../Boxs.js'
-
+/*
 const DivField = styled.div`
   display: flex;
   padding: 10px;
@@ -12,14 +12,12 @@ const DivField = styled.div`
   flex-direction: column;
   align-items: center;
 `
-
+*/
 
 
 const Program = () => {
   return (
-    
       <Boxs />
-   
   );
 };
 

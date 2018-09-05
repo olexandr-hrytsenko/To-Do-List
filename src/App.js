@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import axios from "axios";
 import './App.css'
-import Boxs from './Boxs.js'
+//import Boxs from './Boxs.js'
+import localForage from 'localforage/dist/localforage'
 
 import { css } from 'react-emotion';
-// First way to import
 import { PulseLoader } from 'react-spinners';
-// Another way to import
 
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Home from "./components/Home";
@@ -38,9 +37,12 @@ const DivField = styled.div`
   width: 50%;
   margin-left: 25%;
   color: #fff;
-  font-size: 1.3em;
+  font-size: 1.1em;
   flex-direction: column;
   align-items: center;
+`
+const DivCenter = styled.div`
+  text-align: center;
 `
 
 const Pdate = styled.p`
@@ -78,6 +80,11 @@ class App extends Component {
       1000
     );
   */
+    var user_auth = {};
+    localForage.setDriver(localForage.LOCALSTORAGE).then(() => {
+    localForage.setItem('user_auth', user_auth);
+    })
+
     setTimeout(() => this.setState({ loading: false }), 2000); // simulates an async action, and hides the spinner
   }
 
@@ -97,9 +104,25 @@ class App extends Component {
 }
 
   loginHandle = () => {
-    this.setState(prevState => ({
-     loggedIn: !prevState.loggedIn
-    }))
+    /*this.setState(prevState => ({
+      loggedIn: !prevState.loggedIn
+     }))*/
+
+    if (!this.state.loggedIn) { 
+      const user = this.state.username;
+      const password = this.state.password;
+      if (user.length > 0 & password === 'admin') {
+        axios.get(`https://api.github.com/users/${user}`)
+        .then((res) => {
+          this.setState({ loggedIn: true });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      } else alert('Логин или пароль не верны!');
+    } else {
+      this.setState({ loggedIn: false });
+    }
   }
   
   getUser = (e) => {
@@ -151,13 +174,15 @@ class App extends Component {
             <Pdate>Сегодня: {this.state.date.toLocaleDateString()}</Pdate>
             <BrowserRouter>
               <div>
+              <DivCenter>
                 <Navigation />
                 
                 <UserForm getUser={this.getUser} />
-                { this.state.repos ? <p>Number of repos: { this.state.repos }</p> : <p>Введите имя пользователя..</p> }
-                
+                { this.state.repos ? <p>Количество репозиториев: { this.state.repos }</p> : <p>Введите имя пользователя..</p> }
+              </DivCenter>
+
                 <Switch>
-                  <Route path="/" exact strict component={Home} exact />
+                  <Route path="/" exact strict component={Home} />
                   <Route path="/about" exact strict render={({match})=>(
                   this.state.loggedIn ? ( <About />) : (<Redirect to='/' />)
                   )} />
