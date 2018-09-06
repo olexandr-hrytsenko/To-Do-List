@@ -59,6 +59,10 @@ const Label = styled.label`
   display:"block";
 `
 
+const API = axios.create({
+  baseURL: "http://localhost:3000/api"
+})
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -129,10 +133,13 @@ class App extends Component {
     e.preventDefault();
     const user = e.target.elements.username.value;
     if (user) {
-      axios.get(`https://api.github.com/users/${user}`)
+      API.get(`/Users/${user}?access_token=9FHFwYrGEcPiPZ5qZRkDGWbi38z5RqTmFl1JRHNCUIB5RcY9AV6PSZBMyyf11cBw`)
       .then((res) => {
-        const repos = res.data.public_repos;
-        this.setState({ repos });
+        console.log(res)
+        // const repos = res.data.public_repos;
+        // this.setState({ repos });
+      }).catch(err => {
+        console.log(err)
       })
     } else return;
   }
