@@ -113,8 +113,6 @@ class App extends Component {
       loggedIn: !prevState.loggedIn
      }))*/
 
-
-
     // Проверка login на github
     /* 
     if (!this.state.loggedIn) { 
@@ -172,12 +170,7 @@ class App extends Component {
       .catch(function (error) {
         console.log(error);
       });
-
-  }
-
-
-
-
+    }
   }
   
   getUser = (e) => {
