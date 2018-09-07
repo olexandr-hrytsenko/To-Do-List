@@ -72,7 +72,8 @@ class App extends Component {
       loggedIn:false,
       repos: null,
       username: '',
-      password: ''
+      password: '',
+      id_token: ''
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -112,6 +113,10 @@ class App extends Component {
       loggedIn: !prevState.loggedIn
      }))*/
 
+
+
+    // Проверка login на github
+    /* 
     if (!this.state.loggedIn) { 
       const user = this.state.username;
       const password = this.state.password;
@@ -127,15 +132,68 @@ class App extends Component {
     } else {
       this.setState({ loggedIn: false });
     }
+    */
+
+   if (!this.state.loggedIn) { 
+    const user = this.state.username;
+    const password = this.state.password;
+    if ( user.length > 0 & password.length > 0 ) {
+      //alert("email" + ${user} + "password" + ${password});
+      API.post(`/Users/login`, {"email": user, "password": password})
+      .then((res) => {
+        this.setState({ loggedIn: true });
+        localForage.setItem('id_token', res.data.id);
+        this.setState({ id_token: res.data.id });
+
+        console.log(res.data.id);
+        console.log(res.data.userId);
+        console.log(res.status);
+        if (res.status === 200) {
+          console.log('Ура Вы вошли!');
+        }
+        console.log(res);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    } else alert('Логин или пароль не верны!');
+  } else {
+    const id_token = this.state.id_token;
+    API.post(`/Users/logout?access_token=${id_token}`)
+      .then((res) => {
+        this.setState({ loggedIn: false });  // Logout
+
+        console.log(res.status);
+        if (res.status === 204) {
+          console.log('Вы вышли!');
+        }
+        console.log(res);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+  }
+
+
+
+
   }
   
   getUser = (e) => {
     e.preventDefault();
     const user = e.target.elements.username.value;
     if (user) {
-      API.get(`/Users/${user}?access_token=9FHFwYrGEcPiPZ5qZRkDGWbi38z5RqTmFl1JRHNCUIB5RcY9AV6PSZBMyyf11cBw`)
+      ///Users/${user}?access_token=SxCScbesxja10mfyQWEUI9gtXAntHDDla0OUZ8Ej8K9qs2HsrtMWT3oCulWKexTu
+      API.post(`/Users/login`, {"email": "al@mail.com", "password": "123456"})
       .then((res) => {
-        console.log(res)
+        console.log(res.data.id);
+        console.log(res.data.userId);
+        console.log(res.status);
+        if (res.status === 200) {
+          console.log('Ура Вы вошли!');
+        }
+        console.log(res);
         // const repos = res.data.public_repos;
         // this.setState({ repos });
       }).catch(err => {
