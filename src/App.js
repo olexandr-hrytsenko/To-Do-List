@@ -17,6 +17,12 @@ import Navigation from "./components/Navigation";
 
 import UserForm from "./components/UserForm";
 
+import DropDown from "./components/DropDown";
+
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
+import allReducers from './reducers';
+import UserPage from './components/UserPage'
 
 const override = css`
     display: block;
@@ -63,6 +69,8 @@ const API = axios.create({
   baseURL: "http://localhost:3000/api"
 })
 
+const store = createStore (allReducers);
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -73,7 +81,8 @@ class App extends Component {
       repos: null,
       username: '',
       password: '',
-      id_token: ''
+      id_token: '',
+      userId: null
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -142,6 +151,7 @@ class App extends Component {
         this.setState({ loggedIn: true });
         localForage.setItem('id_token', res.data.id);
         this.setState({ id_token: res.data.id });
+        this.setState({ userId: res.data.userId });
 
         console.log(res.data.id);
         console.log(res.data.userId);
@@ -228,6 +238,10 @@ class App extends Component {
       } else {
         return (
           <DivField>
+            <Provider store={store}>
+              <UserPage />
+            </Provider>
+            <DropDown />
             <input style={{ margin:"20px auto", display:"block" }} type="button" value={this.state.loggedIn ? 'Выход': 'Вход'} onClick={this.loginHandle}/>
             <Pdate>Сегодня: {this.state.date.toLocaleDateString()}</Pdate>
             <BrowserRouter>
