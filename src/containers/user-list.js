@@ -4,8 +4,15 @@ import {connect} from 'react-redux';
 import {select} from '../actions';
 
 class UserList extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            userId: this.props.userId
+        }
+      }
+
     showList () {
-        return this.props.users.map ((user) =>{
+         return this.props.users.map ((user) =>{
             if (user.id === 1) {
                 return (
                     <p onClick={ () => this.props.select (user) }
@@ -33,8 +40,8 @@ function mapStateToProps (state) {
     }
 }
 
-function matchDispatchToProps (dispatch) {
+function mapDispatchToProps (dispatch) {
     return bindActionCreators({select: select}, dispatch)
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(UserList);
+export default connect(mapStateToProps, mapDispatchToProps)(UserList);

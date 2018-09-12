@@ -239,7 +239,7 @@ class App extends Component {
         return (
           <DivField>
             <Provider store={store}>
-              <UserPage />
+              <UserPage userId={this.state.userId} />
             </Provider>
             <DropDown />
             <input style={{ margin:"20px auto", display:"block" }} type="button" value={this.state.loggedIn ? 'Выход': 'Вход'} onClick={this.loginHandle}/>
