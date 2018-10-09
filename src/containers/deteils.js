@@ -25,7 +25,7 @@ const DivBox = styled.div`
 class Details extends Component {
     render() {
         if (!this.props.user) {
-            return (<p>Нажмите подробней...</p>)
+            return (<p>Для подробной информации, нажмите на пользователя...</p>)
         }
         return (
             <DivBox>

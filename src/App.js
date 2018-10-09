@@ -17,6 +17,7 @@ import Navigation from "./components/Navigation";
 
 import UserForm from "./components/UserForm";
 
+// Drop Down Menu block - Profile
 import DropDown from "./components/DropDown";
 
 import {Provider} from 'react-redux';
@@ -182,7 +183,7 @@ class App extends Component {
       });
     }
   }
-  
+  //For form bottom
   getUser = (e) => {
     e.preventDefault();
     const user = e.target.elements.username.value;
@@ -241,7 +242,6 @@ class App extends Component {
             <Provider store={store}>
               <UserPage userId={this.state.userId} />
             </Provider>
-            <DropDown />
             <input style={{ margin:"20px auto", display:"block" }} type="button" value={this.state.loggedIn ? 'Выход': 'Вход'} onClick={this.loginHandle}/>
             <Pdate>Сегодня: {this.state.date.toLocaleDateString()}</Pdate>
             <BrowserRouter>

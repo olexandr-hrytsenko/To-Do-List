@@ -13,7 +13,7 @@ class UserList extends Component {
 
     showList () {
          return this.props.users.map ((user) =>{
-            if (user.id === 1) {
+            if (user.id === 2) {
                 return (
                     <p onClick={ () => this.props.select (user) }
                     key={user.id}>{user.name}</p>
